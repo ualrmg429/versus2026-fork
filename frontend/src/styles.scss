@@ -164,11 +164,21 @@ html, body {
   padding: 32px 16px;
 }
 
+.vs-display {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.vs-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
 .vs-container {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 24px;
 }
+
 
 .vs-duel-grid {
   display: grid;
@@ -239,7 +249,7 @@ html, body {
     height: 18px;
     border-radius: 50%;
     background: var(--vs-life-full);
-    transition: background var(--vs-transition-slow), transform var(--vs-transition);
+    transition: var(--vs-transition-slow), transform var(--vs-transition);
 
     &--lost {
       background: var(--vs-border);
@@ -281,3 +291,4 @@ html, body {
 .animate-correct { animation: vs-correct 600ms ease; }
 .animate-wrong   { animation: vs-wrong 350ms ease; }
 .animate-hit     { animation: vs-hit 600ms ease; }
+
