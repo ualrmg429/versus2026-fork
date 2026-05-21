@@ -55,17 +55,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-test:5432/versus_test
       SPRING_DATASOURCE_USERNAME: versus_test
       SPRING_DATASOURCE_PASSWORD: versus_test_pass
+      SPRING_PROFILES_ACTIVE: it
     volumes:
       - ./backend:/app
       - maven_cache:/root/.m2
     working_dir: /app
     networks:
       - app-network
-    # `verify` invoca compile + test-compile + (surefire saltado) + failsafe.
-    # Llamar a failsafe:integration-test directamente NO compila y rompe el
-    # discovery con NoClassDefFoundError.
+    # `verify` invoca compile + test-compile + surefire (unit tests) + failsafe (integration tests)
     command: >
-      ./mvnw verify -Dsurefire.skip=true --batch-mode -Dstyle.color=never
+      ./mvnw verify --batch-mode -Dstyle.color=never
 
 networks:
   app-network:

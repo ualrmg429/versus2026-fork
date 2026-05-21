@@ -99,26 +99,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
@@ -168,6 +148,33 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!-- Maven Surefire Plugin for unit tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.5.5</version>
+				<configuration>
+					<!-- Only run classes matching *Test pattern, not *IT -->
+					<includes>
+						<include>**/*Test.java</include>
+						<exclude>**/*IT.java</exclude>
+						<exclude>**/it/**/*Test.java</exclude>
+					</includes>
+					<!-- Use test profile for unit tests (H2 in-memory) -->
+					<systemProperties>
+						<property>
+							<name>spring.profiles.active</name>
+							<value>test</value>
+						</property>
+					</systemProperties>
+					<!-- JVM args for Java 21 -->
+					<argLine>
+						--add-opens java.base/java.lang=ALL-UNNAMED
+						--add-opens java.base/java.lang.reflect=ALL-UNNAMED
+						--add-opens java.base/java.util=ALL-UNNAMED
+					</argLine>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -181,15 +188,26 @@
 					</execution>
 				</executions>
 				<configuration>
+					<!-- Only run integration test classes -->
 					<includes>
 						<include>**/*IT.java</include>
 						<include>**/it/**/*Test.java</include>
 					</includes>
+					<!-- Use it profile for integration tests (PostgreSQL) -->
+					<systemProperties>
+						<property>
+							<name>spring.profiles.active</name>
+							<value>it</value>
+						</property>
+					</systemProperties>
+					<!-- JVM args for Java 21 -->
 					<argLine>
 						--add-opens java.base/java.lang=ALL-UNNAMED
 						--add-opens java.base/java.lang.reflect=ALL-UNNAMED
 						--add-opens java.base/java.util=ALL-UNNAMED
 					</argLine>
+					<!-- Timeout for failing fast -->
+					<forkedProcessTimeoutInSeconds>300</forkedProcessTimeoutInSeconds>
 				</configuration>
 			</plugin>
 			<plugin>
